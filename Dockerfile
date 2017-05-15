@@ -1,9 +1,9 @@
-FROM ubuntu:xenial
+FROM node:6.10.3
 
 MAINTAINER godleon@gmail.com
 
-WORKDIR /blog
-VOLUME /blog
+ENV BLOG_ROOT /blog
+
 EXPOSE 4000
 
 RUN \
@@ -11,6 +11,12 @@ RUN \
     mkdir -p /blog && \
     mkdir -p /script
 
-#RUN npm install -g hexo-cli
+RUN npm install -g hexo-cli
+RUN hexo init ${BLOG_ROOT}
 
-WORKDIR /
+WORKDIR ${BLOG_ROOT}
+
+COPY install_plugins.sh /tmp/
+RUN chmod +x /tmp/install_plugins.sh
+RUN /tmp/install_plugins.sh
+
